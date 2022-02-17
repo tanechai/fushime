@@ -48,6 +48,9 @@ def request_loader(req):
 
 
 @app.route('/')
+def index():
+    return '<h1>節目カレンダー<h1>'
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
