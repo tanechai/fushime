@@ -1,4 +1,3 @@
 .vercel
 node_modules/
-refreshToken.json
-firebaseConfig.json
+path/

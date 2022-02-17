@@ -1,7 +1,9 @@
-from flask import Flask, request, jsonify, render_template, redirect, url_for, session
+from flask import Flask, request, redirect, url_for
 from flask_login import login_user, logout_user, LoginManager, UserMixin, login_required, current_user
-import pyrebase
-import json, os
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
+import os
 
 app = Flask(__name__)
 
@@ -15,14 +17,13 @@ login_manager.login_view = "login" # ログインしてない時に飛ばされ�
 users = {'dev@mail.com': {'password': 'secret'}}
 
 # firebaseの設定を読み込む
-json_open = open('./firebaseConfig.json', 'r')
-firebaseConfig = json.load(json_open)
-firebase = pyrebase.initialize_app(firebaseConfig)
-auth = firebase.auth()
-
+# cred = credentials.Certificate("path/to/fushime-9ccc3-firebase-adminsdk-9vqsu-a9d6643f4e.json")
+# firebase_admin.initialize_app(cred)
+# db = firestore.client()
 
 class  User(UserMixin):
     pass
+
 
 @login_manager.user_loader
 def user_loader(email):
