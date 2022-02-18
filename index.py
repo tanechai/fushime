@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, url_for
+from flask import Flask, request, redirect, url_for, render_template
 from flask_login import login_user, logout_user, LoginManager, UserMixin, login_required, current_user
 import firebase_admin
 from firebase_admin import credentials
@@ -17,9 +17,9 @@ login_manager.login_view = "login" # ログインしてない時に飛ばされ�
 users = {'dev@mail.com': {'password': 'secret'}}
 
 # firebaseの設定を読み込む
-# cred = credentials.Certificate("path/to/fushime-9ccc3-firebase-adminsdk-9vqsu-a9d6643f4e.json")
-# firebase_admin.initialize_app(cred)
-# db = firestore.client()
+cred = credentials.Certificate("fushime-9ccc3-firebase-adminsdk-9vqsu-a9d6643f4e.json")
+firebase_admin.initialize_app(cred)
+db = firestore.client()
 
 class  User(UserMixin):
     pass
@@ -49,7 +49,20 @@ def request_loader(req):
 
 @app.route('/')
 def index():
-    return '<h1>節目カレンダー<h1>'
+    return render_template('index.html')
+
+@app.route('/signin', methods=['GET', 'POST'])
+def signin():
+    if request.method == 'GET':
+        return '''
+                <h1>節目カレンダー<h1>
+                <form action='login' method='POST'>
+                <input type='text' name='name' id='name' placeholder='name'/>
+                <input type='password' name='password' id='password' placeholder='password'/>
+                <input type='submit' name='submit'/>
+               </form>
+               '''
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
