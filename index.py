@@ -1,10 +1,7 @@
 from flask import Flask, request, redirect, url_for, render_template
 from flask_login import login_user, logout_user, LoginManager, UserMixin, login_required, current_user
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import firestore
 import os
-
+from functions import firestore
 app = Flask(__name__)
 
 app.secret_key = os.urandom(24)
@@ -15,11 +12,6 @@ login_manager.init_app(app)
 login_manager.login_view = "login" # ログインしてない時に飛ばされる場所
 
 users = {'dev@mail.com': {'password': 'secret'}}
-
-# firebaseの設定を読み込む
-cred = credentials.Certificate("fushime-9ccc3-firebase-adminsdk-9vqsu-a9d6643f4e.json")
-firebase_admin.initialize_app(cred)
-db = firestore.client()
 
 class  User(UserMixin):
     pass
@@ -37,12 +29,15 @@ def user_loader(email):
 
 @login_manager.request_loader
 def request_loader(req):
-    email = req.form.get('email')
-    if email not in users:
+    name = req.form.get('name')
+    password = req.form.get('password')
+    if name not in users:
+        #　ここにサインイン処理を書く
+        firestore.signin(name,password)
         return
 
     user = User()
-    user.id = email
+    user.id = name
 
     return user
 
@@ -51,17 +46,22 @@ def request_loader(req):
 def index():
     return render_template('index.html')
 
+
 @app.route('/signin', methods=['GET', 'POST'])
 def signin():
     if request.method == 'GET':
         return '''
                 <h1>節目カレンダー<h1>
                 <form action='login' method='POST'>
-                <input type='text' name='name' id='name' placeholder='name'/>
-                <input type='password' name='password' id='password' placeholder='password'/>
+                <input type='text' name='name' id='addname' placeholder='name'/>
+                <input type='password' name='password' id='addpassword' placeholder='password'/>
                 <input type='submit' name='submit'/>
                </form>
                '''
+    name = 'test'
+    password = 'pass'
+    
+    return redirect("login")
 
 
 @app.route('/login', methods=['GET', 'POST'])
