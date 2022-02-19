@@ -100,6 +100,11 @@ def calendar():
 def regist():
     return f'''
     <h1>登録ページ<h1>
+    <form action='regist' method='POST'>
+    <input type='text' name='' id='' placeholder=''/>
+    <input type='password' name='' id='' placeholder=''/>
+    <input type='submit' name='submit'/>
+    </form>
     <a href='calendar'>カレンダーに戻る</a>
     '''
 
