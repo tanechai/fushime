@@ -1,6 +1,6 @@
 import datetime
 from operator import itemgetter
-from importance import Importance
+from functions.importance import Importance
 from numpy import unsignedinteger
 
 # 予定の追加、削除、取得を行うクラス

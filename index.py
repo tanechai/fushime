@@ -1,5 +1,9 @@
 from flask import Flask, request, redirect, url_for, render_template
 from flask_login import login_user, logout_user, LoginManager, UserMixin, login_required, current_user
+
+from functions.schedule_manager import schedule_manager
+from functions.account_manager import account_manager
+
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
@@ -14,76 +18,54 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login" # ログインしてない時に飛ばされる場所
 
-users = {'dev@mail.com': {'password': 'secret'}}
-
 # firebaseの設定を読み込む
 cred = credentials.Certificate("fushime-9ccc3-firebase-adminsdk-9vqsu-a9d6643f4e.json")
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
+# ユーザークラスを定義
 class  User(UserMixin):
-    pass
+    def __init__(self,uid):
+        self.id = uid
 
 
 @login_manager.user_loader
-def user_loader(email):
-    if email not in users:
-        return
-
-    user = User()
-    user.id = email
-    return user
-
-
-@login_manager.request_loader
-def request_loader(req):
-    email = req.form.get('email')
-    if email not in users:
-        return
-
-    user = User()
-    user.id = email
-
-    return user
+def user_loader(uid:str):
+    return User(uid)
 
 
 @app.route('/')
-def index():
-    return render_template('index.html')
-
-@app.route('/signin', methods=['GET', 'POST'])
-def signin():
-    if request.method == 'GET':
-        return '''
-                <h1>節目カレンダー<h1>
-                <form action='login' method='POST'>
-                <input type='text' name='name' id='name' placeholder='name'/>
-                <input type='password' name='password' id='password' placeholder='password'/>
-                <input type='submit' name='submit'/>
-               </form>
-               '''
-
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
-        return '''
-                <h1>節目カレンダー<h1>
-                <form action='login' method='POST'>
-                <input type='text' name='name' id='name' placeholder='name'/>
-                <input type='password' name='password' id='password' placeholder='password'/>
-                <input type='submit' name='submit'/>
-               </form>
-               '''
-
-    name = request.form['name']
-    if request.form['password'] == users[name]['password']:
-        user = User()
-        user.id = name
+        return render_template('login.html')
+    name = str(request.form['name'])
+    pwd = str(request.form['password'])
+    account = account_manager(db)
+    uid = account.login(name,pwd)
+    if uid != False:
+        user = User(uid)
         login_user(user)
         return redirect(url_for("calendar"))
+    else:
+        return uid
 
-    return 'Bad login'
+
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'GET':
+        return render_template('signup.html')
+    name = str(request.form['name'])
+    pwd = str(request.form['password'])
+    account = account_manager(db)
+    uid = account.signup(name,pwd)
+    if uid != False:
+        user = User(uid)
+        login_user(user)
+        return redirect(url_for("calendar"))
+    else:
+        return str(uid)
 
 
 @app.route('/calendar')
@@ -95,6 +77,7 @@ def calendar():
     <a href='logout'>logout</a>
     '''
 
+
 @app.route('/regist')
 @login_required
 def regist():
@@ -103,10 +86,12 @@ def regist():
     <a href='calendar'>カレンダーに戻る</a>
     '''
 
+
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for("login"))
+
 
 # run the app.
 if __name__ == "__main__":
