@@ -1,8 +1,8 @@
 from flask import Flask, request, redirect, url_for, render_template
 from flask_login import login_user, logout_user, LoginManager, UserMixin, login_required, current_user
 
-from schedule_manager import schedule_manager
-from account_manager import account_manager
+from functions.schedule_manager import schedule_manager
+from functions.account_manager import account_manager
 
 # import firebase_admin
 # from firebase_admin import credentials

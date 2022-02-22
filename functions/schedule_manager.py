@@ -1,7 +1,7 @@
 import datetime
 from operator import itemgetter
-from importance import Importance
-from numpy import unsignedinteger
+from functions.importance import Importance
+# from numpy import unsignedinteger
 
 # 予定の追加、削除、取得を行うクラス
 class schedule_manager:
@@ -11,7 +11,7 @@ class schedule_manager:
         self.db = db
 
     # 予定を追加する
-    def add(self,subject:str,year:unsignedinteger,month:unsignedinteger,date:unsignedinteger,importance:Importance):
+    def add(self,subject:str,year:int,month:int,date:int,importance:Importance):
         self.db.collection(u'users').document(self.id).collection(u'schedules').add({
             u'subject': subject,
             u'year': year,
@@ -41,7 +41,7 @@ class schedule_manager:
         return schedules
     
     # 今日以降のn個目までの予定をリストで取得する
-    def get_up_to_nth(self,nth:unsignedinteger)->list:
+    def get_up_to_nth(self,nth:int)->list:
         
         schedules = self.get_all() # 全ての予定を取得
 
