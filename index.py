@@ -7,11 +7,11 @@ from functions.account_manager import account_manager
 # import firebase_admin
 # from firebase_admin import credentials
 # from firebase_admin import firestore
-# import os
+import os
 
 app = Flask(__name__)
 
-# app.secret_key = os.urandom(24)
+app.secret_key = os.urandom(24)
 
 # # ログイン機能のセットアップ
 login_manager = LoginManager()
