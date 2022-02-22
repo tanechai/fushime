@@ -4,9 +4,9 @@ from flask_login import login_user, logout_user, LoginManager, UserMixin, login_
 from functions.schedule_manager import schedule_manager
 from functions.account_manager import account_manager
 
-# import firebase_admin
-# from firebase_admin import credentials
-# from firebase_admin import firestore
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
 import os
 
 app = Flask(__name__)
@@ -19,9 +19,9 @@ login_manager.init_app(app)
 login_manager.login_view = "login" # ログインしてない時に飛ばされる場所
 
 # firebaseの設定を読み込む
-# cred = credentials.Certificate()
-# firebase_admin.initialize_app(cred)
-# db = firestore.client()
+cred = credentials.Certificate('firestore_apikey')
+firebase_admin.initialize_app(cred)
+db = firestore.client()
 
 #ユーザークラスを定義
 class  User(UserMixin):
@@ -41,14 +41,14 @@ def login():
         return render_template('login.html')
     name = str(request.form['name'])
     pwd = str(request.form['password'])
-    # account = account_manager(db)
-    # uid = account.login(name,pwd)
-    # if uid != False:
-    #     user = User(uid)
-    #     login_user(user)
-    #     return redirect(url_for("calendar"))
-    # else:
-    #     return uid
+    account = account_manager(db)
+    uid = account.login(name,pwd)
+    if uid != False:
+        user = User(uid)
+        login_user(user)
+        return redirect(url_for("calendar"))
+    else:
+        return uid
 
 
 
@@ -58,14 +58,14 @@ def signup():
         return render_template('signup.html')
     name = str(request.form['name'])
     pwd = str(request.form['password'])
-    # account = account_manager(db)
-    # uid = account.signup(name,pwd)
-    # if uid != False:
-    #     user = User(uid)
-    #     login_user(user)
-    #     return redirect(url_for("calendar"))
-    # else:
-    #     return str(uid)
+    account = account_manager(db)
+    uid = account.signup(name,pwd)
+    if uid != False:
+        user = User(uid)
+        login_user(user)
+        return redirect(url_for("calendar"))
+    else:
+        return str(uid)
 
 
 @app.route('/calendar')
