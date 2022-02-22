@@ -7,7 +7,7 @@ from functions.account_manager import account_manager
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
-import os
+import os,json
 
 app = Flask(__name__)
 
@@ -19,7 +19,7 @@ login_manager.init_app(app)
 login_manager.login_view = "login" # ログインしてない時に飛ばされる場所
 
 # firebaseの設定を読み込む
-api_key =os.getenv('firestore_apikey')
+api_key =json.loads(os.getenv('firestore_apikey'))
 cred = credentials.Certificate(api_key)
 firebase_admin.initialize_app(cred)
 db = firestore.client()
