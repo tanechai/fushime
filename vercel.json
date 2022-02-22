@@ -3,10 +3,11 @@
     "builds": [
         {
             "src": "./*.py",
-            "use": "@vercel/python",
-            "config": {
-                "includeFiles": "functions/**"
-              }
+            "use": "@vercel/python"
+        },
+        {
+            "src": "./functions/*.py",
+            "use": "@vercel/python"
         }
     ],
     "routes": [
