@@ -8,7 +8,8 @@
 <form action='login' method='POST'>
     <input type='text' name='name' id='name' placeholder='name'/>
     <input type='password' name='password' id='password' placeholder='password'/>
-    <input type='submit' name='submit'/>
+    <h2>{{error}}</h2>
+    <button type='submit' name='submit' class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">ログインする</button>
     <a href='signup'>アカウント登録する</a>
 
 </form>

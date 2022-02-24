@@ -5,9 +5,12 @@
 </head>
 <body>
 <h1>アカウントを登録<h1>
+
 <form action='signup' method='POST'>
     <input type='text' name='name' id='ame' placeholder='name'/>
     <input type='password' name='password' id='password' placeholder='password'/>
+    <h2>{{error}}</h2>
     <input type='submit' name='submit'/>
+    <a href='login'>ログインページに戻る</a>
 </form>
 </body>
