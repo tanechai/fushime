@@ -116,8 +116,12 @@ def regist():
     subject = str(request.form['subject'])
     date = str(request.form['date'])
     importance = str(request.form['importance'])
-    if subject == '' or date == '':
-        return render_template('regist.html',error = '予定名と日が入力されてません')
+    if subject == '':
+        flash('予定名が入力されてません','error')
+        return render_template('regist.html')
+    if date == '':
+        flash('予定日が入力されてません','error')
+        return render_template('regist.html')
     # 日付を変数に格納
     dt = datetime.datetime.strptime(date, '%Y-%m-%d')
     year = dt.year
@@ -125,10 +129,11 @@ def regist():
     day = dt.day
     level = train_type(importance)
     if not level:
-        return render_template('regist.html',error = '列車が不正です')
+        flash('重要度が不正です','error')
+        return render_template('regist.html')
     schedule = schedule_manager(current_user.id,db)
     schedule.add(subject,year,month,day,level)
-    return render_template('regist.html',error = '予定が追加されました')
+    return render_template('regist.html',succes ='予定の登録が完了しました' )
 
 
 @app.route('/logout')

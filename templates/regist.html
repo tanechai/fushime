@@ -4,22 +4,56 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-<h1 class='underline'>節目カレンダー</h1>
-<form action='regist' method='POST'>
-    <input type='text' name='subject' id='subject' placeholder='subject'/>
-    <input type="date" name='date' id ='date'/>
-    <select name="importance" id='importance'>
-        <option value="普通">普通</option>
-        <option value="快速">快速</option>
-        <option value="特急">特急</option>
-    </select>
-    <input type='submit' name='submit'/>
-    <a href='calendar'>カレンダーに戻る</a>
-</form>
-<h1>{{error}}</h1>
-<div class="flex flex-row bg-gray-200">
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">1</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">2</div>
-    <div class="text-gray-700 text-center bg-gray-400 px-4 py-2 m-2">3</div>
-</div>
+    <div class="italic ... flex-1 text-white text-left bg-gray-400 py-2">
+        <p class="text-2xl ...">スケアプ-予定がまいりま～す</p>
+        <p class="text-5xl ...">予定登録ページ</p>
+    </div>
+    <form action='regist' method='POST'>
+        <div class="flex items-center border-b border-teal-500">
+            <div class = 'flex-1'>
+                <p class="text-xl py-2">予定名入力</p> 
+                <input class="appearance-none bg-transparent border-none text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" name='subject' id='subject' placeholder="予定名を入れてください">
+            </div>
+            <div class = 'flex-1'>
+                <p class="text-xl py-2">日付入力</p>
+                <input type="date" name='date' id ='date'/>
+            </div>
+            <div class = 'flex-1'>
+                <p class="text-xl py-2">重要度</p>
+                <select name="importance" id='importance'>
+                    <option value="普通">普通</option>
+                    <option value="快速">快速</option>
+                    <option value="特急">特急</option>
+                </select>
+            </div>
+            <div class = 'flex-1'>
+                <button class="flex-shrink-0 bg-teal-600 hover:bg-teal-800 border-teal-600 hover:border-teal-800 text-sm border-4 text-white py-3 px-6 rounded" type='submit' name='submit'>
+                    予定を登録
+                </button>
+            </div>
+        </div>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+              <div class="bg-red-100 border border-red-400 text-red-700 w-full px-4 py-2 m-2 rounded relative" role="alert">
+                <strong class="font-bold">
+                  {% for message in messages %}
+                  <li>{{ message }}</li>
+                  {% endfor %}
+                </strong>
+              </div>
+            {% else %}
+              <div class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight"></div>
+            {% endif %}
+        {% endwith %}
+    </form>
+    <button class="bg-teal-600 hover:bg-teal-800 text-white font-bold py-2 px-4 rounded" >
+        <a href='calendar'>
+        カレンダーに戻る
+        </a>
+    </button>
+    {% if succes %}
+    <div class="bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4" role="alert">
+        <p class="font-bold">{{succes}}</p>
+    </div>
+    {% endif %}
 </body>
