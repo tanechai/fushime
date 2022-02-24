@@ -9,7 +9,7 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 
 import datetime
-import os,re, json
+import os, re, json
 
 app = Flask(__name__,static_folder='./templates/images')
 
@@ -21,13 +21,21 @@ login_manager.init_app(app)
 login_manager.login_view = "login" # ログインしてない時に飛ばされる場所
 
 #firebaseの設定を読み込む
-api_key =json.loads(os.getenv('firestore_apikey'))
-cred = credentials.Certificate(api_key)
-# cred = credentials.Certificate('fushime-9ccc3-firebase-adminsdk-9vqsu-a9d6643f4e.json')
-# firebase_admin.initialize_app(cred)
+# api_key =json.loads(os.getenv('firestore_apikey'))
+# cred = credentials.Certificate(api_key)
+cred = credentials.Certificate('fushime-9ccc3-firebase-adminsdk-9vqsu-a9d6643f4e.json')
+firebase_admin.initialize_app(cred)
 db = firestore.client()
 account = account_manager(db)
 
+# むっくんの関数
+def train_type(nyuuryoku:str):
+    syubetu={"特急":1,"快速":2,"普通":3}
+    if nyuuryoku in syubetu:
+        okurisyubetu=syubetu[nyuuryoku]
+        return int(okurisyubetu)    
+    else:
+        return False
 
 
 #ユーザークラスを定義
@@ -93,15 +101,19 @@ def regist():
         return render_template('regist.html')
     subject = str(request.form['subject'])
     date = str(request.form['date'])
+    importance = str(request.form['importance'])
     if subject == '' or date == '':
         return render_template('regist.html',error = '予定名と日が入力されてません')
-    # '2022-02-02'
+    # 日付を変数に格納
     dt = datetime.datetime.strptime(date, '%Y-%m-%d')
     year = dt.year
     month = dt.month
     day = dt.day
+    level = train_type(importance)
+    if not level:
+        return render_template('regist.html',error = '列車が不正です')
     schedule = schedule_manager(current_user.id,db)
-    schedule.add(subject,year,month,day,1)
+    schedule.add(subject,year,month,day,level)
     return render_template('regist.html',error = '予定が追加されました')
 
 
