@@ -9,10 +9,10 @@
       <img src= images/logo.png  alt="スケアプのロゴ" title="スケアプ">
       <form class="w-full max-w-sm" action='login' method='POST'>
         <div class="flex items-center border-b border-teal-500 py-2">
-          <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" name='signup_name' id='signup_name' placeholder="input name" aria-label="Full name">
+          <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" name='name' id='name' placeholder="input name" aria-label="Full name">
         </div>
         <div class="flex items-center border-b border-teal-500 py-2">
-          <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" name='signup_password' id='signup_password' placeholder="input passwword" aria-label="Full name">
+          <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" name='password' id='password' placeholder="input passwword" aria-label="Full name">
         </div>
         <div class="flex items-center py-2">
           {% with messages = get_flashed_messages() %}
