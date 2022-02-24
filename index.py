@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, url_for, render_template
+from flask import Flask, request, redirect, url_for, render_template, flash
 from flask_login import login_user, logout_user, LoginManager, UserMixin, login_required, current_user
 
 from functions.schedule_manager import schedule_manager
@@ -58,6 +58,12 @@ def login():
         return render_template('login.html')
     check_name = str(request.form['name'])
     password = str(request.form['password'])
+    if check_name == '':
+        flash('ユーザー名が空欄です')
+        return render_template('login.html')
+    if check_name == '':
+        flash('パスワードが空欄です')
+        return render_template('login.html')
     uid= account.login(check_name,password)
     print(uid)
     if uid != False:
@@ -65,7 +71,7 @@ def login():
         login_user(user)
         return redirect(url_for("calendar"))
     else:
-        # flash('パスワードかユーザー名が違います')
+        flash('パスワードかユーザー名が違います')
         return render_template('login.html')
 
 
@@ -76,8 +82,11 @@ def signup():
         return render_template('signup.html')
     add_name = str(request.form['name'])
     password = str(request.form['password'])
+    if add_name == '':
+        flash('ユーザー名が空欄です')
+        return render_template('signup.html')
     if re.match('\A[a-z\d]{8,100}\Z(?i)',password) != True:
-        # flash('パスワードは半角英数字8文字以上です')
+        flash('パスワードは半角英数字8文字以上です')
         return render_template('signup.html')
     uid = account.signup(add_name,password)
     if uid != False:
@@ -85,7 +94,7 @@ def signup():
         login_user(user)
         return redirect(url_for("calendar"))
     else:
-        # flash('すでに登録済みのユーザーです')
+        flash('すでに登録済みのユーザーです')
         return render_template('signup.html')
 
 
