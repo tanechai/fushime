@@ -30,4 +30,11 @@ class account_manager:
             if doc.id :
                 return doc.id
         return False
+
+    def user_name(self,user_id):
+        doc_ref = self.db.collection(u'users').document(user_id)
+        doc = doc_ref.get()
+        if doc.exists:
+            dict_doc = doc.to_dict()
+            return dict_doc[u'username']
     
