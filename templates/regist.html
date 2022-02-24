@@ -4,10 +4,15 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-<h1>節目カレンダー</h1>
+<h1 class='underline'>節目カレンダー</h1>
 <form action='regist' method='POST'>
     <input type='text' name='subject' id='subject' placeholder='subject'/>
     <input type="date" name='date' id ='date'/>
+    <select name="importance" id='importance'>
+        <option value="普通">普通</option>
+        <option value="快速">快速</option>
+        <option value="特急">特急</option>
+    </select>
     <input type='submit' name='submit'/>
     <a href='calendar'>カレンダーに戻る</a>
 </form>
