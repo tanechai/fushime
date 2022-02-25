@@ -75,6 +75,8 @@ def login():
         return render_template('login.html')
 
 
+def is_matched(s):
+    return True if re.fullmatch('(?i:\A[a-z\d]{8,100}\Z)', s) else False
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -85,7 +87,7 @@ def signup():
     if add_name == '':
         flash('ユーザー名が空欄です')
         return render_template('signup.html')
-    if re.match('\A[a-z\d]{8,100}\Z(?i)',password) != True:
+    if is_matched(password) != True:
         flash('パスワードは半角英数字8文字以上です')
         return render_template('signup.html')
     uid = account.signup(add_name,password)
